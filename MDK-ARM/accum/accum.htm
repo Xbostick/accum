@@ -3,7 +3,7 @@
 <title>Static Call Graph - [accum\accum.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image accum\accum.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Mar 29 15:06:15 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Mar 29 16:48:19 2024
 <BR><P>
 <H3>Maximum Stack Usage =        488 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -403,8 +403,8 @@ Global Symbols
 <P><STRONG><a name="[103]"></a>__rt_memcpy</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, rt_memcpy.o(.text), UNUSED)
 
 <P><STRONG><a name="[59]"></a>_memset_w</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, rt_memclr.o(.text), UNUSED)
-<BR><BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_memset
-<LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_memclr_w
+<BR><BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_memclr_w
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_memset
 </UL>
 
 <P><STRONG><a name="[58]"></a>_memset</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, rt_memclr.o(.text), UNUSED)
@@ -649,9 +649,9 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 48 + Unknown Stack Size
 <LI>Call Chain = abort &rArr; __rt_SIGABRT &rArr; __rt_SIGABRT_inner &rArr; __default_signal_display &rArr; _ttywrch
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sys_exit
+<BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGABRT
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sys_exit
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_lib_shutdown
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGABRT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__cxa_get_globals
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;[local to arm_exceptions_c]::__default_terminate_handler()
@@ -661,8 +661,8 @@ Global Symbols
 <P><STRONG><a name="[6c]"></a>__rt_SIGRTMEM</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, defsig_rtmem_outer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = __rt_SIGRTMEM &rArr; __rt_SIGRTMEM_inner &rArr; __default_signal_display &rArr; _ttywrch
 </UL>
-<BR>[Calls]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGRTMEM_inner
-<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__sig_exit
+<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__sig_exit
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGRTMEM_inner
 </UL>
 <BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_init_alloc
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__Heap_Broken
@@ -687,9 +687,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4e]"></a>_sys_exit</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, sys_exit.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abort
+<BR><BR>[Called By]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__sig_exit
+<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abort
 <LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_exit_exit
-<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__sig_exit
 </UL>
 
 <P><STRONG><a name="[110]"></a>__I$use$semihosting</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
@@ -707,15 +707,15 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sys_exit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGRTMEM
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGABRT
+<BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGABRT
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGRTMEM
 </UL>
 
 <P><STRONG><a name="[76]"></a>__rt_SIGABRT</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, defsig_abrt_outer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = __rt_SIGABRT &rArr; __rt_SIGABRT_inner &rArr; __default_signal_display &rArr; _ttywrch
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGABRT_inner
-<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__sig_exit
+<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__sig_exit
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_SIGABRT_inner
 </UL>
 <BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abort
 </UL>
@@ -1204,16 +1204,17 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[c3]"></a>InternalFLASH::find_page(unsigned)</STRONG> (Thumb, 78 bytes, Stack size 32 bytes, flash_driver.o(i._ZN13InternalFLASH9find_pageEj))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = InternalFLASH::find_page(unsigned)
+<P><STRONG><a name="[c3]"></a>InternalFLASH::find_page(unsigned)</STRONG> (Thumb, 94 bytes, Stack size 36 bytes, flash_driver.o(i._ZN13InternalFLASH9find_pageEj))
+<BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = InternalFLASH::find_page(unsigned)
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InternalFLASH::InternalFLASH()
 </UL>
 
-<P><STRONG><a name="[c2]"></a>InternalFLASH::InternalFLASH()</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, flash_driver.o(i._ZN13InternalFLASHC1Ev))
-<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = InternalFLASH::InternalFLASH() &rArr; InternalFLASH::find_page(unsigned)
+<P><STRONG><a name="[c2]"></a>InternalFLASH::InternalFLASH()</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, flash_driver.o(i._ZN13InternalFLASHC1Ev))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = InternalFLASH::InternalFLASH() &rArr; operator new(unsigned) &rArr; malloc &rArr; __Heap_Full &rArr; __Heap_ProvideMemory &rArr; free
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InternalFLASH::find_page(unsigned)
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;operator new(unsigned)
 </UL>
 <BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1275,6 +1276,7 @@ Global Symbols
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_new_handler_addr
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FlashData::FlashData(char*, int, FlashMeta*)
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InternalFLASH::InternalFLASH()
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InternalFLASH::WriteData(FlashData*)
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Data::Data(char*)
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;operator new[] (unsigned)
@@ -1300,7 +1302,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InternalFLASH::WriteData(FlashData*)
 </UL>
 
-<P><STRONG><a name="[49]"></a>main</STRONG> (Thumb, 188 bytes, Stack size 320 bytes, main.o(i.main))
+<P><STRONG><a name="[49]"></a>main</STRONG> (Thumb, 190 bytes, Stack size 320 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 488 + Unknown Stack Size
 <LI>Call Chain = main &rArr; SystemClock_Config() &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uldivmod
 </UL>

@@ -31,8 +31,6 @@ accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h
 accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h
 accum\main.o: ../Core/Inc/smart_battery.h
 accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cstring
-accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 accum\main.o: ../Core/Inc/Flash_Driver.h
 accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

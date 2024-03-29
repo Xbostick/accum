@@ -1,7 +1,7 @@
 #include "Flash_Driver.h"
 /* part of cool hierarchy*/
 
-uint32_t ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[] = {0x08000000};
+uint32_t ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[] = {0x8000000U};
 uint32_t FLASH_PAGE_SIZE_NTYPE[] = {0x400};
 uint32_t FLASH_PAGE_NTYPE_COUNTS[] = {64}; // there is no page 0. Starting from page 1(!!!)
 uint8_t  FLASH_NTYPE_COUNT = 1;
@@ -34,29 +34,32 @@ FlashData::FlashData(char* raw_string,int len, FlashMeta* meta) : Data(raw_strin
 
 
 FLASH_Page InternalFLASH::find_page(uint32_t addr){
-    FLASH_Page res;
+    FLASH_Page res = {0,0};
     for (int page_type = 0; 
         page_type < FLASH_NTYPE_COUNT; 
         page_type++){
         for (int page = 1; 
             page < FLASH_PAGE_NTYPE_COUNTS[page_type];
             page++){
-                if (addr < page * FLASH_PAGE_SIZE_NTYPE[page_type])
+                if (addr < ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[page_type] + (page * FLASH_PAGE_SIZE_NTYPE[page_type])){
                     res.page_num = page - 1;
                     res.page_type = page_type;
                     return res;
+                }
             }
     }
     return FLASH_Page();    
 };
 
 InternalFLASH::InternalFLASH(){
-    this->start_page = find_page(Load$$LR$$LR_IROM1$$Limit);
+    this->start_page = find_page((uint32_t)&Load$$LR$$LR_IROM1$$Limit); // ptr externed in .h. It pointing to the end of ROM
     this->current_page.page_type = this->start_page.page_type;
     this->current_page.page_num = this->start_page.page_num + 1;
     this->current_addres = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[this->start_page.page_type] 
                             + FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type] * this->current_page.page_num;
-    this->storage = NULL;
+    this->storage = new FlashMap_List;
+    this->storage->data = new FlashMeta;
+    this->storage->prev = NULL;
 
 }
 

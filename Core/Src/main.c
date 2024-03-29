@@ -22,8 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "smart_battery.h"
-#include <cstring>
-#include <string.h>
+#include "string.h"
+#include "stdio.h"
 #include "Flash_Driver.h"
 /* USER CODE END Includes */
 
@@ -92,9 +92,8 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
     }
 }
 
-
-#include "string.h"
-#include "stdio.h"
+extern uint32_t Load$$LR$$LR_IROM1$$Limit;
+uint32_t b = (uint32_t)&Load$$LR$$LR_IROM1$$Limit;
 
 /* USER CODE END 0 */
 
@@ -117,6 +116,7 @@ int main(void)
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
   char test[256];
+   // pointer to end of software
   sprintf(test,"Limit %08X\n", (uint32_t)&Load$$LR$$LR_IROM1$$Limit);
   
 
@@ -151,7 +151,7 @@ HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
 
 SmartBattery ba(&hi2c1);
   /* USER CODE END 2 */
-
+  uint32_t a = (uint32_t)&Load$$LR$$LR_IROM1$$Limit; // pointer to end of software
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   ba.CMD(SBCommands_Basic::Voltage);
