@@ -9,7 +9,7 @@ extern "C++" {
 
 #include "stm32f0xx_hal.h"
 #include "string.h"
-
+#include "math.h"
 #include "STM32F04x_Flash_mapping.h"
 
 extern uint32_t Load$$LR$$LR_IROM1$$Limit; // pointer to end of software

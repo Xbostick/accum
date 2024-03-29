@@ -648,7 +648,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Flash_Driver.cpp</PathWithFileName>
+      <PathWithFileName>..\Core\Src\Flash_Driver.cpp</PathWithFileName>
       <FilenameWithoutPath>Flash_Driver.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -660,7 +660,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Flash_Driver.h</PathWithFileName>
+      <PathWithFileName>..\Core\Inc\Flash_Driver.h</PathWithFileName>
       <FilenameWithoutPath>Flash_Driver.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
