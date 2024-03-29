@@ -160,7 +160,7 @@ SmartBattery ba(&hi2c1);
   FlashData datak((char*)ba.buff, 8);
   flash.WriteData(&datak);
   uint32_t* data_readed;
-  FlashData CheckRecord = flash.ReadData();
+  FlashData* CheckRecord = flash.ReadData();
   //HAL_Delay(test);
   while (1)
   {

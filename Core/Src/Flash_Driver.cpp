@@ -59,8 +59,8 @@ InternalFLASH::InternalFLASH(){
     this->current_addres = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[this->start_page.page_type] 
                             + FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type] * this->current_page.page_num;
     this->storage = new FlashMap_List;
-    this->storage->data = new FlashMeta;
-    this->storage->prev = NULL;
+    this->storage->Meta = new FlashMeta;
+    this->storage->Prev = NULL;
 
 }
 
@@ -70,17 +70,17 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
     
     if (data->meta->start == 0) data->meta->start = this->current_addres;
 
-    if (this->storage->prev != NULL){
-        data->meta->idx = this->storage->prev->data->idx + 1;
+    if (this->storage->Prev != NULL){
+        data->meta->idx = this->storage->Prev->Meta->idx + 1;
     }
     else{
         data->meta->idx = 0;
     }
 
     memcpy(data_buff,data->raw,strlen(data->raw));
-    memcpy(this->storage->data, data->meta,sizeof(FlashMeta));
+    memcpy(this->storage->Meta, data->meta,sizeof(FlashMeta));
     
-    storage_buff->prev = this->storage;
+    storage_buff->Prev = this->storage;
     this->storage = storage_buff;
 
     HAL_FLASH_Unlock();
@@ -102,22 +102,23 @@ FlashData* InternalFLASH::ReadData(int idx){
     uint32_t* data_buff = new uint32_t;
     FlashMeta *NewFlashMeta = new FlashMeta;
     if (idx == -1){
-        NewFlashMeta->idx = this->storage->prev->data->meta->idx;
+        NewFlashMeta->idx = this->storage->Prev->Meta->idx;
     }
     else{
         NewFlashMeta->idx = idx;
     }
     
     FlashMap_List *ExistingFlashDataRecords = this->storage;
-    while (ExistingFlashDataRecords->prev!= NULL){
-        ExistingFlashDataRecords = ExistingFlashDataRecords->prev;
+    while (ExistingFlashDataRecords->Prev!= NULL){
+        ExistingFlashDataRecords = ExistingFlashDataRecords->Prev;
         if (ExistingFlashDataRecords->Meta->idx == NewFlashMeta->idx){
             memcpy(NewFlashMeta,ExistingFlashDataRecords->Meta,sizeof(FlashMeta));
-            FlashData* NewFlashData = new FlashData(
-                NewFlashMeta->start,NewFlashMeta->len,NewFlashMeta);
+            memcpy(data_buff,(uint32_t*)NewFlashMeta->start,NewFlashMeta->len);
+            FlashData* NewFlashData = new FlashData((char*)data_buff,NewFlashMeta->len,NewFlashMeta);
+            return NewFlashData;
         }
     
     }
     delete data_buff;
-    return NewFlashData;
+    return nullptr;
 }
