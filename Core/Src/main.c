@@ -155,9 +155,8 @@ SmartBattery ba(&hi2c1);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   ba.CMD(SBCommands_Basic::Voltage);
-  memcpy(TxData ,ba.buff, 8);
   InternalFLASH flash;
-  FlashData datak((char*)ba.buff, 8);
+  FlashData datak((char*)ba.buff, 2);
   flash.WriteData(&datak);
   uint32_t* data_readed;
   FlashData* CheckRecord = flash.ReadData();
@@ -165,7 +164,6 @@ SmartBattery ba(&hi2c1);
   //HAL_Delay(test);
   while (1)
   {
-    TxData = CheckRecord.
     data_readed = ba.GetData();
     TxHeader.StdId = 0x0378;
       while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan) == 0);
