@@ -57,7 +57,7 @@ struct FlashMeta{
 struct FlashMap_List{
 
     FlashMeta*          data;
-    FlashMap_List* 		next;    
+    FlashMap_List* 		prev;    
 };
 
 class FlashData : public Data
