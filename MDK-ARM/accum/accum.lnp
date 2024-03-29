@@ -1,0 +1,28 @@
+--cpu Cortex-M0
+"accum\startup_stm32f042x6.o"
+"accum\main.o"
+"accum\stm32f0xx_it.o"
+"accum\stm32f0xx_hal_msp.o"
+"accum\stm32f0xx_hal_can.o"
+"accum\stm32f0xx_hal_rcc.o"
+"accum\stm32f0xx_hal_rcc_ex.o"
+"accum\stm32f0xx_hal.o"
+"accum\stm32f0xx_hal_i2c.o"
+"accum\stm32f0xx_hal_i2c_ex.o"
+"accum\stm32f0xx_hal_gpio.o"
+"accum\stm32f0xx_hal_dma.o"
+"accum\stm32f0xx_hal_cortex.o"
+"accum\stm32f0xx_hal_pwr.o"
+"accum\stm32f0xx_hal_pwr_ex.o"
+"accum\stm32f0xx_hal_flash.o"
+"accum\stm32f0xx_hal_flash_ex.o"
+"accum\stm32f0xx_hal_exti.o"
+"accum\stm32f0xx_hal_tim.o"
+"accum\stm32f0xx_hal_tim_ex.o"
+"accum\system_stm32f0xx.o"
+"accum\smart_battery.o"
+"accum\flash_driver.o"
+--strict --scatter "accum\accum.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "accum.map" -o accum\accum.axf
