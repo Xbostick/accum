@@ -33,8 +33,9 @@ class Data
     char *raw;
     int* idxs;
     int num_idx = 0;
+    int len = 0;
 
-    Data(char* raw_string);
+    Data(char* raw_string, int len);
 
     //virtual OperationStatus CheckSum() = 0;
 
@@ -50,7 +51,7 @@ struct FlashMeta{
     int32_t 			len;
     char*               Name;
     int                 NameLen;
-    int                 idx;//нужен ли?
+    int                 idx;// internal usage now
     char*               Description;
     int                 DescriptionLen;
 };
@@ -90,7 +91,8 @@ class InternalFLASH{
   public:
     InternalFLASH();
     OperationStatus WriteData(FlashData* data);
-    FlashData* ReadData(FlashMeta* data);
+    FlashData* ReadData(int idx = -1);
+    FlashData* ReadAll(FlashMeta* data);
     OperationStatus Erase(FlashMeta* data);
 };
   

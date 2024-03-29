@@ -7,10 +7,11 @@ uint32_t FLASH_PAGE_NTYPE_COUNTS[] = {64}; // there is no page 0. Starting from 
 uint8_t  FLASH_NTYPE_COUNT = 1;
 
 /*-------Data---------*/
-Data::Data(char* raw_string)
+Data::Data(char* raw_string, int len)
 {  
     this->raw = new char;
-    memcpy (this->raw, raw_string, strlen(raw_string));
+    memcpy (this->raw, raw_string, len);
+    this->len = len;
 };
 
 
@@ -64,12 +65,19 @@ InternalFLASH::InternalFLASH(){
 }
 
 OperationStatus InternalFLASH::WriteData(FlashData* data){
-    uint32_t* buff = new uint32_t;
+    uint32_t* data_buff = new uint32_t;
     FlashMap_List* storage_buff = new FlashMap_List;
     
     if (data->meta->start == 0) data->meta->start = this->current_addres;
 
-    memcpy(buff,data->raw,strlen(data->raw));
+    if (storage->prev != NULL){
+        data->meta->idx = storage->prev->data->meta->idx + 1;
+    }
+    else{
+        data->meta->idx = 0;
+    }
+
+    memcpy(data_buff,data->raw,strlen(data->raw));
     memcpy(this->storage->data, data->meta,sizeof(FlashMeta));
     
     storage_buff->prev = this->storage;
@@ -77,13 +85,38 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
 
     HAL_FLASH_Unlock();
     for (int i = 0; i < ceil(((float)strlen(data->raw))/4); i++ ){
-        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD,this->current_addres,buff[i]) != HAL_OK){
+        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD,this->current_addres,data_buff[i]) != HAL_OK){
             HAL_FLASH_Lock();
           return OperationStatus::ErrorCode;        
         }
         this->current_addres += 4;
     }
     HAL_FLASH_Lock();
+
+    delete data_buff, data;  
     return OperationStatus::OK;    
 
+}
+
+FlashData* InternalFLASH::ReadData(int idx){
+    uint32_t* data_buff = new uint32_t;
+    FlashData* data = new FlashData;
+    if (idx == -1){
+        data->meta->idx = this->storage->prev->data->meta->idx;
+    }
+    else{
+        data->meta->idx = idx;
+    }
+
+    FlashMap_List *flash_data = this->storage;
+    while (flash_data->prev!= NULL){
+        flash_data = flash_data->prev;
+        if (flash_data->data->meta->idx == data->meta->idx){
+            memcpy(data->meta,flash_data->data,sizeof(FlashMeta));
+            memcpy(data->raw,flash_data->data->start,flash_data->data->len);
+        }
+    
+    }
+    delete data_buff;
+    return data;
 }
