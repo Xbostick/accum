@@ -115,6 +115,7 @@ FlashData* InternalFLASH::ReadData(int idx){
             memcpy(NewFlashMeta,ExistingFlashDataRecords->Meta,sizeof(FlashMeta));
             memcpy(data_buff,(uint32_t*)NewFlashMeta->start,NewFlashMeta->len);
             FlashData* NewFlashData = new FlashData((char*)data_buff,NewFlashMeta->len,NewFlashMeta);
+            delete data_buff;
             return NewFlashData;
         }
     
