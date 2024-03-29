@@ -24,6 +24,7 @@
 #include "smart_battery.h"
 #include <cstring>
 #include <string.h>
+#include "Flash_Driver.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -155,6 +156,9 @@ SmartBattery ba(&hi2c1);
   /* USER CODE BEGIN WHILE */
   ba.CMD(SBCommands_Basic::Voltage);
   memcpy(TxData ,ba.buff, 8);
+  InternalFLASH flash;
+  FlashData data(ba.buff, 8);
+  flash.WriteData();
   uint32_t* data_readed;
   //HAL_Delay(test);
   while (1)

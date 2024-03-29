@@ -1,4 +1,5 @@
 #include "Flash_Driver.h"
+#include <cmath>
 
 /* part of cool hierarchy*/
 
@@ -14,7 +15,13 @@ Data::Data(char* raw_string)
 FlashData::FlashData(char* raw_string,int len, FlashMeta* meta = nullptr) : Data(raw_string)
 {   
     if (meta == nullptr)
-        this->meta = new FlashMeta;
+        FlashMeta* self_creted_meta = new FlashMeta;
+        self_creted_meta->Description = "Automatic generated meta";
+        self_creted_meta->DescriptionLen = strlen(self_creted_meta->Description);
+        self_creted_meta->idx = 0;
+        self_creted_meta->len = len;
+        self_creted_meta->start = 0;
+        this->meta = self_creted_meta;
     else
         this->meta = meta;
 };
@@ -43,7 +50,8 @@ FLASH_Page InternalFLASH::find_page(uint32_t addr){
 InternalFLASH::InternalFLASH(){
     this->start_page = find_page(Load$$LR$$LR_IROM1$$Limit) + 1;
     this->current_page = this->start_page;
-    this->curent_addres = 0;
+    this->curent_addres = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[this->start_page.page_type] 
+                            + FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type] * this->current_page.page_num;
     this->storage.data = new FlashMeta;
     this->storage.prev = NULL;
 
@@ -52,6 +60,8 @@ InternalFLASH::InternalFLASH(){
 OperationStatus InternalFLASH::WriteData(FlashData* data){
     uint32_t* buff = new uint32_t;
     FlashMap_List* storage_buff = new FlashMap_List;
+    
+    if (data->meta.start == 0) data->meta.start = this->curent_addres;
 
     memcpy(buff,data->raw,strlen(data->raw));
     memcpy(this->storage.data, data->meta,sizeof(FlashMeta));
@@ -60,7 +70,14 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
     this->storage = storage_buff;
 
     HAL_FLASH_Unlock();
-    for (int i = 0; i < sizeof(buff)/sizeof(buff[0], i++))
-        HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD,data->meta.start + (i * 4), buff);
+    for (int i = 0; i < ceil(float(strlen(buff))/4), i++ ){
+        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD,this->curent_addres,buff[i]) != HAL_OK){
+            HAL_FLASH_Lock();
+            return OperationStatus::ERROR;        
+        }
+        this->curent_addres += 4;
+    }
+    HAL_FLASH_Lock();
+    return OperationStatus::OK;    
 
 }
