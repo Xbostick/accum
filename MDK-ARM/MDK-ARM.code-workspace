@@ -27,7 +27,9 @@
             "editor.insertSpaces": true,
             "editor.tabSize": 4,
             "editor.autoIndent": "advanced"
-        }
+        },
+        "git.terminalGitEditor": true,
+        "github.gitAuthentication": true
     },
     "extensions": {
         "recommendations": [
