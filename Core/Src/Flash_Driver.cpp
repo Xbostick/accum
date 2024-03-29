@@ -15,7 +15,7 @@ Data::Data(char* raw_string, int len)
 };
 
 
-FlashData::FlashData(char* raw_string,int len, FlashMeta* meta) : Data(raw_string)
+FlashData::FlashData(char* raw_string,int len, FlashMeta* meta) : Data(raw_string, len)
 {   
     if (meta == nullptr){
         FlashMeta* self_creted_meta = new FlashMeta;
@@ -70,8 +70,8 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
     
     if (data->meta->start == 0) data->meta->start = this->current_addres;
 
-    if (storage->prev != NULL){
-        data->meta->idx = storage->prev->data->meta->idx + 1;
+    if (this->storage->prev != NULL){
+        data->meta->idx = this->storage->prev->data->idx + 1;
     }
     else{
         data->meta->idx = 0;
@@ -100,7 +100,7 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
 
 FlashData* InternalFLASH::ReadData(int idx){
     uint32_t* data_buff = new uint32_t;
-    FlashData* data = new FlashData;
+    FlashData* Flash_Data = new FlashData;
     if (idx == -1){
         data->meta->idx = this->storage->prev->data->meta->idx;
     }

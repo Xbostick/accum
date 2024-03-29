@@ -157,7 +157,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>45</LineNumber>
+          <LineNumber>59</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -173,7 +173,7 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>58</LineNumber>
+          <LineNumber>172</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -182,7 +182,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\Core\Src\Flash_Driver.cpp</Filename>
+          <Filename>../Core/Src/main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -205,9 +205,41 @@
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
+          <LineNumber>45</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134229892</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\Core\Src\Flash_Driver.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\\../Core/Src/Flash_Driver.cpp\45</Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>58</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134229996</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\Core\Src\Flash_Driver.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\accum\../Core/Src/Flash_Driver.cpp\58</Expression>
+        </Bp>
+        <Bp>
+          <Number>5</Number>
+          <Type>0</Type>
           <LineNumber>79</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134229754</Address>
+          <Address>134229750</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -219,11 +251,11 @@
           <Expression>\\accum\../Core/Src/Flash_Driver.cpp\79</Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
+          <Number>6</Number>
           <Type>0</Type>
           <LineNumber>81</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134229780</Address>
+          <Address>134229776</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -235,11 +267,11 @@
           <Expression>\\accum\../Core/Src/Flash_Driver.cpp\81</Expression>
         </Bp>
         <Bp>
-          <Number>5</Number>
+          <Number>7</Number>
           <Type>0</Type>
           <LineNumber>80</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134229776</Address>
+          <Address>134229754</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -251,27 +283,11 @@
           <Expression>\\accum\../Core/Src/Flash_Driver.cpp\80</Expression>
         </Bp>
         <Bp>
-          <Number>6</Number>
-          <Type>0</Type>
-          <LineNumber>83</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134229786</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\Core\Src\Flash_Driver.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\accum\../Core/Src/Flash_Driver.cpp\83</Expression>
-        </Bp>
-        <Bp>
-          <Number>7</Number>
+          <Number>8</Number>
           <Type>0</Type>
           <LineNumber>57</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134229980</Address>
+          <Address>134229990</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -283,11 +299,11 @@
           <Expression>\\accum\../Core/Src/Flash_Driver.cpp\57</Expression>
         </Bp>
         <Bp>
-          <Number>8</Number>
+          <Number>9</Number>
           <Type>0</Type>
           <LineNumber>54</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134229952</Address>
+          <Address>134229964</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -299,11 +315,11 @@
           <Expression>\\accum\../Core/Src/Flash_Driver.cpp\54</Expression>
         </Bp>
         <Bp>
-          <Number>9</Number>
+          <Number>10</Number>
           <Type>0</Type>
           <LineNumber>154</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134231964</Address>
+          <Address>134231980</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -313,6 +329,22 @@
           <Filename>../Core/Src/main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\accum\../Core/Src/main.c\154</Expression>
+        </Bp>
+        <Bp>
+          <Number>11</Number>
+          <Type>0</Type>
+          <LineNumber>86</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134229842</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\Core\Src\Flash_Driver.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\accum\../Core/Src/Flash_Driver.cpp\86</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -392,7 +424,7 @@
         <Mm>
           <WinNumber>3</WinNumber>
           <SubType>0</SubType>
-          <ItemText>0x08003AF0</ItemText>
+          <ItemText>0x08003C00</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow3>
