@@ -161,10 +161,11 @@ SmartBattery ba(&hi2c1);
   flash.WriteData(&datak);
   uint32_t* data_readed;
   FlashData* CheckRecord = flash.ReadData();
+  memcpy(TxData,CheckRecord->raw,8);
   //HAL_Delay(test);
   while (1)
   {
-    
+    TxData = CheckRecord.
     data_readed = ba.GetData();
     TxHeader.StdId = 0x0378;
       while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan) == 0);
