@@ -100,23 +100,24 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
 
 FlashData* InternalFLASH::ReadData(int idx){
     uint32_t* data_buff = new uint32_t;
-    FlashData* Flash_Data = new FlashData;
+    FlashMeta *NewFlashMeta = new FlashMeta;
     if (idx == -1){
-        data->meta->idx = this->storage->prev->data->meta->idx;
+        NewFlashMeta->idx = this->storage->prev->data->meta->idx;
     }
     else{
-        data->meta->idx = idx;
+        NewFlashMeta->idx = idx;
     }
-
-    FlashMap_List *flash_data = this->storage;
-    while (flash_data->prev!= NULL){
-        flash_data = flash_data->prev;
-        if (flash_data->data->meta->idx == data->meta->idx){
-            memcpy(data->meta,flash_data->data,sizeof(FlashMeta));
-            memcpy(data->raw,flash_data->data->start,flash_data->data->len);
+    
+    FlashMap_List *ExistingFlashDataRecords = this->storage;
+    while (ExistingFlashDataRecords->prev!= NULL){
+        ExistingFlashDataRecords = ExistingFlashDataRecords->prev;
+        if (ExistingFlashDataRecords->Meta->idx == NewFlashMeta->idx){
+            memcpy(NewFlashMeta,ExistingFlashDataRecords->Meta,sizeof(FlashMeta));
+            FlashData* NewFlashData = new FlashData(
+                NewFlashMeta->start,NewFlashMeta->len,NewFlashMeta);
         }
     
     }
     delete data_buff;
-    return data;
+    return NewFlashData;
 }
