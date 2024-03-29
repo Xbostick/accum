@@ -74,14 +74,14 @@ class FlashData : public Data
 struct FLASH_Page{
     uint32_t page_num;
     uint8_t page_type;
-}
+};
 
 class InternalFLASH{
   private:
     FLASH_Page current_page;
     FLASH_Page start_page;
     uint32_t current_addres; // nearest free address
-    FlashMap_List storage = NULL;
+    FlashMap_List* storage = NULL;
 
     FLASH_Page find_page(uint32_t addr);
 
@@ -91,7 +91,7 @@ class InternalFLASH{
     OperationStatus WriteData(FlashData* data);
     FlashData* ReadData(FlashMeta* data);
     OperationStatus Erase(FlashMeta* data);
-}
+};
   
 
 #ifndef __cplusplus

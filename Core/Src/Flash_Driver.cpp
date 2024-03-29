@@ -14,7 +14,7 @@ Data::Data(char* raw_string)
 
 FlashData::FlashData(char* raw_string,int len, FlashMeta* meta = nullptr) : Data(raw_string)
 {   
-    if (meta == nullptr)
+    if (meta == nullptr){
         FlashMeta* self_creted_meta = new FlashMeta;
         self_creted_meta->Description = "Automatic generated meta";
         self_creted_meta->DescriptionLen = strlen(self_creted_meta->Description);
@@ -22,6 +22,7 @@ FlashData::FlashData(char* raw_string,int len, FlashMeta* meta = nullptr) : Data
         self_creted_meta->len = len;
         self_creted_meta->start = 0;
         this->meta = self_creted_meta;
+    }
     else
         this->meta = meta;
 };
