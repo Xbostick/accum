@@ -527,6 +527,11 @@
               <FileType>5</FileType>
               <FilePath>..\Core\Inc\Flash_Driver.h</FilePath>
             </File>
+            <File>
+              <FileName>STM32F04x_Flash_mapping.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\STM32F04x_Flash_mapping.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

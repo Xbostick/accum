@@ -1,6 +1,10 @@
 #include "Flash_Driver.h"
 /* part of cool hierarchy*/
 
+uint32_t ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[] = {0x08000000};
+uint32_t FLASH_PAGE_SIZE_NTYPE[] = {0x400};
+uint32_t FLASH_PAGE_NTYPE_COUNTS[] = {64}; // there is no page 0. Starting from page 1(!!!)
+uint8_t  FLASH_NTYPE_COUNT = 1;
 
 /*-------Data---------*/
 Data::Data(char* raw_string)
@@ -52,8 +56,7 @@ InternalFLASH::InternalFLASH(){
     this->current_page.page_num = this->start_page.page_num + 1;
     this->current_addres = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[this->start_page.page_type] 
                             + FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type] * this->current_page.page_num;
-    this->storage->data = new FlashMeta;
-    this->storage->prev = NULL;
+    this->storage = NULL;
 
 }
 

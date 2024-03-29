@@ -79,7 +79,7 @@ enum SBCommands_Special {
   SafetyStatus            = 0x51,
   PFAlert                 = 0x52,
   PFStatus                = 0x53,
-  OperationStatus         = 0x54,
+  OperationStatus_SB      = 0x54,
   ChargingStatus          = 0x55,
   GaugingStatus           = 0x56,
   ManufacturingStatus     = 0x57,

@@ -10,16 +10,17 @@ extern "C++" {
 #include "stm32f0xx_hal.h"
 #include "string.h"
 #include "math.h"
-#include "STM32F04x_Flash_mapping.h"
+//#include "STM32F04x_Flash_mapping.h"
+
 
 extern uint32_t Load$$LR$$LR_IROM1$$Limit; // pointer to end of software
 /* part of cool hierarchy*/
-enum OperationStatus
+typedef enum OperationStatus
 {
 	OK = 0,
 	Not_OK,
 	ErrorCode
-};
+} OperationStatus;
 
 
 class Data
@@ -35,7 +36,7 @@ class Data
 
     Data(char* raw_string);
 
-    virtual OperationStatus CheckSum() = 0;
+    //virtual OperationStatus CheckSum() = 0;
 
     // char* NextIter();
 
@@ -56,7 +57,7 @@ struct FlashMeta{
 
 struct FlashMap_List{
 
-    FlashMeta*          data;
+    FlashMeta*        data;
     FlashMap_List* 		prev;    
 };
 
@@ -81,7 +82,7 @@ class InternalFLASH{
     FLASH_Page current_page;
     FLASH_Page start_page;
     uint32_t current_addres; // nearest free address
-    FlashMap_List* storage = NULL;
+    FlashMap_List* storage;
 
     FLASH_Page find_page(uint32_t addr);
 

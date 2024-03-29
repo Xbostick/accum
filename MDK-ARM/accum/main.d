@@ -33,4 +33,6 @@ accum\main.o: ../Core/Inc/smart_battery.h
 accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cstring
 accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+accum\main.o: ../Core/Inc/Flash_Driver.h
+accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

@@ -31,5 +31,3 @@ accum\flash_driver.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h
 accum\flash_driver.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h
 accum\flash_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 accum\flash_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-accum\flash_driver.o: ../Core/Inc/STM32F04x_Flash_mapping.h
-accum\flash_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

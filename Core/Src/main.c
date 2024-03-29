@@ -157,8 +157,8 @@ SmartBattery ba(&hi2c1);
   ba.CMD(SBCommands_Basic::Voltage);
   memcpy(TxData ,ba.buff, 8);
   InternalFLASH flash;
-  FlashData data(ba.buff, 8);
-  flash.WriteData();
+  FlashData datak((char*)ba.buff, 8);
+  flash.WriteData(&datak);
   uint32_t* data_readed;
   //HAL_Delay(test);
   while (1)
