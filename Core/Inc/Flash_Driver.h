@@ -9,17 +9,18 @@ extern "C++" {
 
 #include "stm32f0xx_hal.h"
 #include "string.h"
+#include "math.h"
+//#include "STM32F04x_Flash_mapping.h"
 
-#include "STM32F04x_Flash_mapping.h"
 
 extern uint32_t Load$$LR$$LR_IROM1$$Limit; // pointer to end of software
 /* part of cool hierarchy*/
-enum OperationStatus
+typedef enum OperationStatus
 {
 	OK = 0,
 	Not_OK,
 	ErrorCode
-};
+} OperationStatus;
 
 
 class Data
@@ -32,10 +33,11 @@ class Data
     char *raw;
     int* idxs;
     int num_idx = 0;
+    int len = 0;
 
-    Data(char* raw_string);
+    Data(char* raw_string, int len);
 
-    virtual OperationStatus CheckSum() = 0;
+    //virtual OperationStatus CheckSum() = 0;
 
     // char* NextIter();
 
@@ -45,19 +47,19 @@ class Data
 };
 
 struct FlashMeta{
-    int32_t 			start; // sector number
+    int32_t 			start; // adress in flash memory
     int32_t 			len;
     char*               Name;
     int                 NameLen;
-    int                 idx;
+    int                 idx;// internal usage now
     char*               Description;
     int                 DescriptionLen;
 };
 
 struct FlashMap_List{
 
-    FlashMeta*          data;
-    FlashMap_List* 		prev;    
+    FlashMeta*          Meta;
+    FlashMap_List* 		Prev;    
 };
 
 class FlashData : public Data
@@ -65,7 +67,7 @@ class FlashData : public Data
 
     public:
         FlashMeta*   meta;
-        FlashData(char* raw_string, int len, FlashMeta* meta);
+        FlashData(char* raw_string, int len, FlashMeta* meta = nullptr);
        // Делается кастом(cast) FlashData(Data* data);
 };
 
@@ -74,14 +76,14 @@ class FlashData : public Data
 struct FLASH_Page{
     uint32_t page_num;
     uint8_t page_type;
-}
+};
 
 class InternalFLASH{
   private:
     FLASH_Page current_page;
     FLASH_Page start_page;
-    uint32_t current_addres;
-    FlashMap_List storage = NULL;
+    uint32_t current_addres; // nearest free address
+    FlashMap_List* storage;
 
     FLASH_Page find_page(uint32_t addr);
 
@@ -89,9 +91,10 @@ class InternalFLASH{
   public:
     InternalFLASH();
     OperationStatus WriteData(FlashData* data);
-    FlashData* ReadData(FlashMeta* data);
-    OperationStatus Erase(FlashMeta* data)
-}
+    FlashData* ReadData(int idx = -1);
+    FlashData* ReadAll(FlashMeta* data);
+    OperationStatus Erase(FlashMeta* data);
+};
   
 
 #ifndef __cplusplus

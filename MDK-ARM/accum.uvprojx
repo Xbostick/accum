@@ -520,12 +520,17 @@
             <File>
               <FileName>Flash_Driver.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\Flash_Driver.cpp</FilePath>
+              <FilePath>..\Core\Src\Flash_Driver.cpp</FilePath>
             </File>
             <File>
               <FileName>Flash_Driver.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Flash_Driver.h</FilePath>
+              <FilePath>..\Core\Inc\Flash_Driver.h</FilePath>
+            </File>
+            <File>
+              <FileName>STM32F04x_Flash_mapping.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\STM32F04x_Flash_mapping.h</FilePath>
             </File>
           </Files>
         </Group>
