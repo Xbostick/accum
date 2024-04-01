@@ -36,6 +36,7 @@ class Data
     int len = 0;
 
     Data(char* raw_string, int len);
+    Data();
 
     //virtual OperationStatus CheckSum() = 0;
 

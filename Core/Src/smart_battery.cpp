@@ -10,7 +10,14 @@ void SmartBattery::CMD(uint8_t SBCommand){
   HAL_I2C_Master_Receive(_hal_i2c_handler,_i2cAddr,buff,100,100);
 }
 
+/**
+ * @brief  The SmartBattery::GetData() method retrieves battery data 
+ * and returns a pointer to an array containing 27 32-bit integers.
+ * 
+ * @return uint32_t* 
+ */
 uint32_t* SmartBattery::GetData(){
+  
   uint32_t* data = new uint32_t[27];
   
   for (int i = 0; i <= SBCommands_Special::CellVoltage_1 - SBCommands_Special::CellVoltage_14; i++){
@@ -40,6 +47,12 @@ uint32_t* SmartBattery::GetData(){
     
 }
 
+/**
+ * @brief The SmartBattery::GetFlightData() method retrieves flight data
+ * and returns a pointer to an array containing 5 32-bit integers.
+ * 
+ * @return uint32_t* 
+ */
 uint32_t* SmartBattery::GetFlightData(){
   uint32_t* data = new uint32_t[5];
   
