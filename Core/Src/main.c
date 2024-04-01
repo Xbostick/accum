@@ -165,7 +165,6 @@ SmartBattery ba(&hi2c1);
   //HAL_Delay(test);
   while (1)
   {
-    TxData = CheckRecord.
     data_readed = ba.GetData();
     TxHeader.StdId = 0x0378;
       while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan) == 0);
