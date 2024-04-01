@@ -118,8 +118,42 @@ void CAN_SendFlyingData(SmartBattery* battery){
     }
   delete TxData_2_Send;
 };
-void CAN_SaveFalsh(){};
-void SaveFalsh(SmartBattery battery, long count){
+void CAN_SaveFalshRegular(SmartBattery* battery, InternalFLASH* flash){
+
+  uint32_t time = 0;
+  uint32_t id = 0;
+  int NewRecord_Len
+  char* NewRecord_RawData = new char[29];
+  NewRecord_RawData[0] = time;
+  NewRecord_RawData[1] = id;
+  NewRecord_RawData[2] = (char*)battery.GetData(); //type??? 
+
+  NewRecord_Data.raw = NewRecord_RawData;
+  NewRecord_Data.len = NewRecord_Len;
+
+  FlashData* NewRecord_Container = new FlashData(
+                                                NewRecord_RawData,
+                                                NewRecord_Len
+                                                );
+  flash.WriteData(NewRecord_Container);
+};
+void SaveEvent(SmartBattery battery, InternalFLASH* flash){
+  uint32_t time = 0;
+  uint32_t id = 1;
+  int NewRecord_Len
+  char* NewRecord_RawData = new char[29];
+  NewRecord_RawData[0] = time;
+  NewRecord_RawData[1] = id;
+  NewRecord_RawData[2] = (char*)battery.GetData(); //type??? 
+
+  NewRecord_Data.raw = NewRecord_RawData;
+  NewRecord_Data.len = NewRecord_Len;
+
+  FlashData* NewRecord_Container = new FlashData(
+                                                NewRecord_RawData,
+                                                NewRecord_Len
+                                                );
+  flash.WriteData(NewRecord_Container);
 };
 void check_tx(){};
 

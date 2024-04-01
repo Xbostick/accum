@@ -9,11 +9,15 @@ uint8_t  FLASH_NTYPE_COUNT = 1;
 /*-------Data---------*/
 Data::Data(char* raw_string, int len)
 {  
-    this->raw = new char;
+    this->raw = new char[len];
     memcpy (this->raw, raw_string, len);
     this->len = len;
 };
 
+Data::Data(){
+    this->raw = nullptr;
+    this->len = 0;
+};
 
 FlashData::FlashData(char* raw_string,int len, FlashMeta* meta) : Data(raw_string, len)
 {   
