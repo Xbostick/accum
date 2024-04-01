@@ -66,8 +66,58 @@ static void MX_I2C1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void CAN_SendDataFromFlash(){};
-void CAN_SendFlyingData(){};
+
+/*Function which export all data from flash and send it to the CAN bus 
+  After this function, all flash data will be erased 
+  
+  TODO: add timer from flight start*/
+void CAN_SendDataFromFlash(InternalFLASH* flash){
+  
+
+  FlashMap_List *FlashDataRecord = flash->storage;
+  // Tx like [num, len, data..] 
+  while(FlashDataRecord->Prev != NULL){
+    FlashDataRecord = FlashDataRecord->Prev;
+    uint8_t* TxData_2_Send = new uint8_t[FlashDataRecord->Meta->len + 2];
+    TxData_2_Send[0] = FlashDataRecord->Meta->idx;
+    TxData_2_Send[1] = FlashDataRecord->Meta->len;
+    memcpy(TxData_2_Send + 2, (uint32_t*)FlashDataRecord->Meta->start, FlashDataRecord->Meta->len);
+
+    TxHeader.StdId = 0x181; //id
+    TxHeader.ExtId = 0;
+    TxHeader.RTR = CAN_RTR_DATA; //CAN_RTR_REMOTE
+    TxHeader.IDE = CAN_ID_STD;   // CAN_ID_EXT
+    TxHeader.DLC =  FlashDataRecord->Meta->len + 2;
+
+    if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+      {
+              HAL_Delay(10);
+      }
+    delete TxData_2_Send;
+    FlashDataRecord = FlashDataRecord->Prev;
+  }
+
+  flash.EraseAllRecords();
+};
+
+/*Function so send ongoing state
+
+  TODO Check types!!*/
+void CAN_SendFlyingData(SmartBattery* battery){
+  uint32_t* TxData_2_Send = battery.GetFlightData();
+  
+  TxHeader.StdId = 0x182; //id
+  TxHeader.ExtId = 0;
+  TxHeader.RTR = CAN_RTR_DATA; //CAN_RTR_REMOTE
+  TxHeader.IDE = CAN_ID_STD;   // CAN_ID_EXT
+  TxHeader.DLC =  4;
+
+  if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+    {
+            HAL_Delay(10);
+    }
+  delete TxData_2_Send;
+};
 void CAN_SaveFalsh(){};
 void SaveFalsh(SmartBattery battery, long count){
 };
@@ -139,7 +189,7 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 /* USER CODE BEGIN 2 */
-TxHeader.StdId = 0x0377;
+TxHeader.StdId = 0x181; //id
 TxHeader.ExtId = 0;
 TxHeader.RTR = CAN_RTR_DATA; //CAN_RTR_REMOTE
 TxHeader.IDE = CAN_ID_STD;   // CAN_ID_EXT
