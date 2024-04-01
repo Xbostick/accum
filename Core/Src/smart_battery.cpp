@@ -39,3 +39,24 @@ uint32_t* SmartBattery::GetData(){
   return data;
     
 }
+
+uint32_t* SmartBattery::GetFlightData(){
+  uint32_t* data = new uint32_t[5];
+  
+  CMD(SBCommands_Basic::Voltage);
+  memcpy(data ,buff, 1);
+
+  CMD(SBCommands_Basic::RelativeStateOfCharge);
+  memcpy(data + 1 ,buff, 1);
+
+  CMD(SBCommands_Basic::RunTimeToEmpty);
+  memcpy(data + 2 ,buff, 1);
+
+  CMD(SBCommands_Basic::RemainingCapacity);
+  memcpy(data + 3 ,buff, 1);
+  
+  CMD(SBCommands_Basic::AverageTimeToEmpty);
+  memcpy(data +4, buff, 1);
+
+  return data;
+};

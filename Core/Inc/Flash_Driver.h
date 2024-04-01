@@ -48,7 +48,6 @@ class Data
 
 struct FlashMeta{
     int32_t 			start; // adress in flash memory
-    int32_t 			len;
     char*               Name;
     int                 NameLen;
     int                 idx;// internal usage now
@@ -86,6 +85,7 @@ class InternalFLASH{
     FlashMap_List* storage;
 
     FLASH_Page find_page(uint32_t addr);
+    //OperationStatus CleanInterval(uint32_t beggin, uint32_t len);
 
   
   public:
@@ -93,7 +93,8 @@ class InternalFLASH{
     OperationStatus WriteData(FlashData* data);
     FlashData* ReadData(int idx = -1);
     FlashData* ReadAll(FlashMeta* data);
-    OperationStatus Erase(FlashMeta* data);
+    OperationStatus EraseAllRecords();
+    //OperationStatus EraseRecord(int idx = -1);
 };
   
 
