@@ -7,32 +7,57 @@ uint32_t FLASH_PAGE_NTYPE_COUNTS[] = {64}; // there is no page 0. Starting from 
 uint8_t  FLASH_NTYPE_COUNT = 1;
 
 /*-------Data---------*/
-Data::Data(char* raw_string, int len)
+Data::Data(uint8_t* RawData, uint32_t Data_Raw_Len, uint8_t Data_Id, uint8_t Data_GovernorCode)
 {  
-    this->raw = new char[len];
-    memcpy (this->raw, raw_string, len);
-    this->len = len;
+    this->Data_Raw = new uint8_t[Data_Raw_Len];
+    memcpy (this->Data_Raw, RawData, Data_Raw_Len);
+    this->Data_Raw_Len = Data_Raw_Len;
+    this->Data_Id = Data_Id;
+    this->Data_GovernorCode = Data_GovernorCode;
 };
 
 Data::Data(){
-    this->raw = nullptr;
-    this->len = 0;
+    this->Data_Raw = nullptr;
+    this->Data_Raw_Len = 0;
+    this->Data_Id = 0;
+    this->Data_GovernorCode = 0;
+}
+Data::Data(Data *ExstData){
+    this->Data_Raw = ExstData->Data_Raw;
+    this->Data_Raw_Len = ExstData->Data_Raw_Len;
+    this->Data_Id = ExstData->Data_Id;
+    this->Data_GovernorCode = ExstData->Data_GovernorCode;
+
+    delete ExstData;
 };
 
-FlashData::FlashData(char* raw_string,int len, FlashMeta* meta) : Data(raw_string, len)
+FlashData::FlashData(uint8_t* RawData, uint32_t Data_Raw_Len, FlashMeta* ExistingMeta) : Data(RawData, Data_Raw_Len)
 {   
-    if (meta == nullptr){
+    if (ExistingMeta == nullptr){
         FlashMeta* self_creted_meta = new FlashMeta;
         self_creted_meta->Description = "Automatic generated meta";
         self_creted_meta->DescriptionLen = strlen(self_creted_meta->Description);
         self_creted_meta->idx = 0;
         self_creted_meta->start = 0;
-        this->meta = self_creted_meta;
+        self_creted_meta->len = ceil(((float)Data_Raw_Len)/4);
+        this->FlashData_Meta = self_creted_meta;
     }
     else
-        this->meta = meta;
+        this->FlashData_Meta = ExistingMeta;
+}
+FlashData::FlashData(Data *ExstData, FlashMeta *ExistingMeta) : Data(ExstData){
+    if (ExistingMeta == nullptr){
+        FlashMeta* self_creted_meta = new FlashMeta;
+        self_creted_meta->Description = "Automatic generated meta";
+        self_creted_meta->DescriptionLen = strlen(self_creted_meta->Description);
+        self_creted_meta->idx = 0;
+        self_creted_meta->start = 0;
+        self_creted_meta->len = ceil(((float)ExstData->Data_Raw_Len)/4);
+        this->FlashData_Meta = self_creted_meta;
+    }
+    else
+        this->FlashData_Meta = ExistingMeta;
 };
-
 
 /*End of part of cool hierarchy*/
 
@@ -67,27 +92,37 @@ InternalFLASH::InternalFLASH(){
 
 }
 
+/**
+ * @brief Function to write data in internal flash
+ * @details Casting bytes data to 32bits data, to use WORD program algorythm
+ * 
+ * @param data 
+ * @return OperationStatus 
+ */
 OperationStatus InternalFLASH::WriteData(FlashData* data){
     uint32_t* data_buff = new uint32_t;
     FlashMap_List* storage_buff = new FlashMap_List;
     
-    if (data->meta->start == 0) data->meta->start = this->current_addres;
+    /*If in MetaData no starting addres write it after previous record*/
+    if (data->FlashData_Meta->start == 0) data->FlashData_Meta->start = this->current_addres; 
 
+    /*Automatic indexing records in `FlashData`*/
     if (this->storage->Prev != NULL){
-        data->meta->idx = this->storage->Prev->Meta->idx + 1;
+        data->FlashData_Meta->idx = this->storage->Prev->Meta->idx + 1;
     }
     else{
-        data->meta->idx = 0;
+        data->FlashData_Meta->idx = 0;
     }
 
-    memcpy(data_buff,data->raw,strlen(data->raw));
-    memcpy(this->storage->Meta, data->meta,sizeof(FlashMeta));
+    memcpy(data_buff,data->Data_Raw,data->Data_Raw_Len);
+    memcpy(this->storage->Meta, data->FlashData_Meta,sizeof(FlashMeta));
     
     storage_buff->Prev = this->storage;
     this->storage = storage_buff;
 
     HAL_FLASH_Unlock();
-    for (int i = 0; i < ceil(((float)data->len)/4); i++ ){
+    /*Using `ceil` for divide with round up*/
+    for (int i = 0; i < data->; i++ ){
         if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD,this->current_addres,data_buff[i]) != HAL_OK){
             HAL_FLASH_Lock();
           return OperationStatus::ErrorCode;        
@@ -97,13 +132,19 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
     HAL_FLASH_Lock();
 
     delete data_buff, data;  
-    return OperationStatus::OK;    
+    return OperationStatus::OK;  
 
 }
 
+/**
+ * @brief Create `FlashData` object with RawData same as in iternal flash on addr in Meta
+ * 
+ * @param idx if empty(equal -1) read latest records, else read idxed
+ * @return FlashData* 
+ */
 FlashData* InternalFLASH::ReadData(int idx){
-    uint32_t* data_buff = new uint32_t;
     FlashMeta *NewFlashMeta = new FlashMeta;
+
     if (idx == -1){
         NewFlashMeta->idx = this->storage->Prev->Meta->idx;
     }
@@ -116,14 +157,14 @@ FlashData* InternalFLASH::ReadData(int idx){
         ExistingFlashDataRecords = ExistingFlashDataRecords->Prev;
         if (ExistingFlashDataRecords->Meta->idx == NewFlashMeta->idx){
             memcpy(NewFlashMeta,ExistingFlashDataRecords->Meta,sizeof(FlashMeta));
+            /*`data_buff` needed to simply cast uint32_t to uint8_t without endian troubles*/
+            uint32_t* data_buff = new uint32_t[NewFlashMeta->len];
             memcpy(data_buff,(uint32_t*)NewFlashMeta->start,NewFlashMeta->len);
-            FlashData* NewFlashData = new FlashData((char*)data_buff,NewFlashMeta->len,NewFlashMeta);
+            FlashData* NewFlashData = new FlashData((uint8_t*)data_buff,NewFlashMeta->len,NewFlashMeta);
             delete data_buff;
             return NewFlashData;
-        }
-    
+        }    
     }
-    delete data_buff;
     return nullptr;
 }
 
@@ -134,14 +175,22 @@ OperationStatus InternalFLASH::EraseAllRecords(){
         delete FlashDataRecord;        
     }
 
-    this.current_addres = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[this->start_page.page_type] 
-                            + FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type] * (this->start_page.page_num + 1); 
-    this.current_page = 
-    for (int i = 0; i < FLASH_PAGE_NTYPE_COUNTS[this->start_page.page_type]; i++){
+     for (int i = 0; i < FLASH_PAGE_NTYPE_COUNTS[this->start_page.page_type]; i++){
         FLASH_EraseInitTypeDef EraseInitStruct;
         EraseInitStruct.TypeErase     = FLASH_TYPEERASE_PAGES;
-        EraseInitStruct.PageAddress   = this.current_addres;
-        EraseInitStruct.NbPages       = FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type];
+
+        /*Skipping pages with ROM*/
+        if (this->start_page.page_type == i){            
+            EraseInitStruct.PageAddress   = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[i] + 
+                                            (this->start_page.page_num + 1) * FLASH_PAGE_SIZE_NTYPE[i];
+            EraseInitStruct.NbPages       = FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type] - 
+                                            (this->start_page.page_num + 1);
+        }
+        else{
+            EraseInitStruct.PageAddress   = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[i];
+            EraseInitStruct.NbPages       = FLASH_PAGE_SIZE_NTYPE[i];
+        }
+        
 
         HAL_FLASH_Unlock();
         uint32_t PageError;

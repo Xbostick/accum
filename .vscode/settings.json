@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.rmd": "markdown",
-        "main.h": "c"
+        "main.h": "c",
+        "cmath": "cpp"
     }
 }

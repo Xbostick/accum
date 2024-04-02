@@ -137,10 +137,12 @@ void CAN_SaveFalshRegular(SmartBattery* battery, InternalFLASH* flash){
                                                 );
   flash.WriteData(NewRecord_Container);
 };
+
+
 void SaveEvent(SmartBattery battery, InternalFLASH* flash){
   uint32_t time = 0;
   uint32_t id = 1;
-  int NewRecord_Len
+  int NewRecord_Len;
   char* NewRecord_RawData = new char[29];
   NewRecord_RawData[0] = time;
   NewRecord_RawData[1] = id;
@@ -156,6 +158,7 @@ void SaveEvent(SmartBattery battery, InternalFLASH* flash){
   flash.WriteData(NewRecord_Container);
 };
 void check_tx(){};
+
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) 
 /*CAN recieve command calback*/
