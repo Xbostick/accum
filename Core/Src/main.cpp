@@ -111,9 +111,9 @@ void CAN_SendFlyingData(SmartBattery* battery){
   TxHeader.ExtId = 0;
   TxHeader.RTR = CAN_RTR_DATA; //CAN_RTR_REMOTE
   TxHeader.IDE = CAN_ID_STD;   // CAN_ID_EXT
-  TxHeader.DLC =  4;
+  TxHeader.DLC =  8;
 
-  if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+  if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, (uint8_t*)TxData_2_Send, &TxMailbox) != HAL_OK)
     {
             HAL_Delay(10);
     }

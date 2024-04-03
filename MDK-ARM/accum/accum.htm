@@ -3,7 +3,7 @@
 <title>Static Call Graph - [accum\accum.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image accum\accum.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Apr 03 14:59:19 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Apr 03 16:42:10 2024
 <BR><P>
 <H3>Maximum Stack Usage =        472 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1205,7 +1205,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CAN_RxFifo0MsgPendingCallback
 </UL>
 
-<P><STRONG><a name="[b7]"></a>SmartBattery::GetFlightData()</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, smart_battery.o(i._ZN12SmartBattery13GetFlightDataEv))
+<P><STRONG><a name="[b7]"></a>SmartBattery::GetFlightData()</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, smart_battery.o(i._ZN12SmartBattery13GetFlightDataEv))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = SmartBattery::GetFlightData() &rArr; SmartBattery::CMD(unsigned char) &rArr; HAL_I2C_Master_Transmit &rArr; [local to stm32f0xx_hal_i2c_c]::I2C_WaitOnTXISFlagUntilTimeout(__I2C_HandleTypeDef*, unsigned, unsigned) &rArr; [local to stm32f0xx_hal_i2c_c]::I2C_IsErrorOccurred(__I2C_HandleTypeDef*, unsigned, unsigned)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SmartBattery::CMD(unsigned char)
@@ -1225,7 +1225,7 @@ Global Symbols
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[bd]"></a>SmartBattery::GetData()</STRONG> (Thumb, 202 bytes, Stack size 16 bytes, smart_battery.o(i._ZN12SmartBattery7GetDataEv))
+<P><STRONG><a name="[bd]"></a>SmartBattery::GetData()</STRONG> (Thumb, 190 bytes, Stack size 16 bytes, smart_battery.o(i._ZN12SmartBattery7GetDataEv))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = SmartBattery::GetData() &rArr; SmartBattery::CMD(unsigned char) &rArr; HAL_I2C_Master_Transmit &rArr; [local to stm32f0xx_hal_i2c_c]::I2C_WaitOnTXISFlagUntilTimeout(__I2C_HandleTypeDef*, unsigned, unsigned) &rArr; [local to stm32f0xx_hal_i2c_c]::I2C_IsErrorOccurred(__I2C_HandleTypeDef*, unsigned, unsigned)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SmartBattery::CMD(unsigned char)

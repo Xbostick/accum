@@ -24,7 +24,7 @@ uint32_t* SmartBattery::GetData(){
   /* 2 bytes */
   CMD(SBCommands_Basic::AverageTimeToEmpty);
   /* first 16 bytes for technical needs*/
-  data[0] += *((uint16_t*)(buff));
+  data[0] = *((uint16_t*)(buff));
   
   /* 2 bytes each, so 2*14 = 28 bytes = 7 uint32*/
 
@@ -38,7 +38,7 @@ uint32_t* SmartBattery::GetData(){
   
   /* 2 bytes */
   CMD(SBCommands_Basic::Voltage);
-  data[8] +=  *(uint16_t*)buff << 16;
+  data[8] =  *(uint16_t*)buff << 16;
   
   /* 1 byte*/
   CMD(SBCommands_Basic::RelativeStateOfCharge);
@@ -50,7 +50,7 @@ uint32_t* SmartBattery::GetData(){
   
   /* 2 bytes */
   CMD(SBCommands_Basic::RunTimeToEmpty);
-  data[9] += *(uint16_t*)buff << 16;
+  data[9] = *(uint16_t*)buff << 16;
 
   /* 2 bytes */  
   CMD(SBCommands_Basic::RemainingCapacity);
@@ -62,27 +62,34 @@ uint32_t* SmartBattery::GetData(){
 
 /**
  * @brief The SmartBattery::GetFlightData() method retrieves flight data
- * and returns a pointer to an array containing 5 32-bit integers.
+ * and returns a pointer to an array containing 2 32-bit integers.
  * 
  * @return uint32_t* 
  */
 uint32_t* SmartBattery::GetFlightData(){
-  uint32_t* data = new uint32_t[5];
+  uint32_t* data = new uint32_t[2];
   
-  CMD(SBCommands_Basic::Voltage);
-  memcpy(data ,buff, 1);
 
+  /* 1 byte */
   CMD(SBCommands_Basic::RelativeStateOfCharge);
-  memcpy(data + 1 ,buff, 1);
+  /* first 24 bytes for technical needs*/
+  data[0] += *buff;
 
+  /* 2 bytes*/
+  CMD(SBCommands_Basic::Voltage);
+  data[1] = *(uint16_t*)buff << 16;
+
+  /* 2 bytes */
   CMD(SBCommands_Basic::RunTimeToEmpty);
-  memcpy(data + 2 ,buff, 1);
+  data[1] += *(uint16_t*)buff;
 
+  /* 2 bytes */
   CMD(SBCommands_Basic::RemainingCapacity);
-  memcpy(data + 3 ,buff, 1);
+  data[2] = *(uint16_t*)buff << 16;
   
+  /* 2 bytes */
   CMD(SBCommands_Basic::AverageTimeToEmpty);
-  memcpy(data +4, buff, 1);
+  data[2] += *(uint16_t*)buff;
 
   return data;
 };
