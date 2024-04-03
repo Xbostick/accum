@@ -88,7 +88,7 @@ class Data
  */
 struct FlashMeta{
     uint32_t 			start; // adress in flash memory
-    uint32_t            len; //in 32 bits
+    uint32_t            len; //size in 32_bits units
     char*               Name;
     int                 NameLen;
     int                 idx;// internal usage now
@@ -100,8 +100,7 @@ struct FlashMeta{
  * @brief Child from Data with extra struct `FlashMeta`
  * 
  */
-class FlashData : public Data
-{   
+class FlashData : public Data{   
 
     public:
         FlashMeta*   FlashData_Meta;
@@ -137,8 +136,7 @@ class InternalFLASH{
     FLASH_Page current_page;
     FLASH_Page start_page;
     uint32_t current_addres; // nearest free address
-    /*After each action `storage->Meta` should be `new Meta`*/
-    FlashMap_List* storage; 
+    
 
     FLASH_Page find_page(uint32_t addr);
     //OperationStatus CleanInterval(uint32_t beggin, uint32_t len);
@@ -150,6 +148,9 @@ class InternalFLASH{
     FlashData* ReadData(int idx = -1);
     FlashData* ReadAll(FlashMeta* data);
     OperationStatus EraseAllRecords();
+
+    /*After each action `storage->Meta` should be `new Meta`*/
+    FlashMap_List* storage; 
     //OperationStatus EraseRecord(int idx = -1);
 };
   

@@ -22,86 +22,25 @@ Dialog DLL:      TARMCM1.DLL V1.14.1.0
  
 <h2>Project:</h2>
 C:\works\Accum\accum\MDK-ARM\accum.uvprojx
-Project File Date:  04/02/2024
+Project File Date:  04/03/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'accum'
-compiling Flash_Driver.cpp...
-../Core/Inc/Flash_Driver.h(105): warning:  #1-D: last line of file ends without a newline
+compiling main.cpp...
+../Core/Inc/Flash_Driver.h(161): warning:  #1-D: last line of file ends without a newline
   #endif
-..\Core\Src\Flash_Driver.cpp(119): error:  #135: class "FlashMeta"  has no member "len"
-              memcpy(data_buff,(uint32_t*)NewFlashMeta->start,NewFlashMeta->len);
-..\Core\Src\Flash_Driver.cpp(120): error:  #135: class "FlashMeta"  has no member "len"
-              FlashData* NewFlashData = new FlashData((char*)data_buff,NewFlashMeta->len,NewFlashMeta);
-..\Core\Src\Flash_Driver.cpp(137): error:  #153: expression must have class type
-      this.current_addres = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[this->start_page.page_type] 
-..\Core\Src\Flash_Driver.cpp(139): error:  #153: expression must have class type
-      this.current_page = 
-..\Core\Src\Flash_Driver.cpp(140): error:  #29: expected an expression
-      for (int i = 0; i < FLASH_PAGE_NTYPE_COUNTS[this->start_page.page_type]; i++){
-..\Core\Src\Flash_Driver.cpp(153): warning:  #12-D: parsing restarts here after previous syntax error
-      return OperationStatus::OK;
-..\Core\Src\Flash_Driver.cpp(155): warning:  #940-D: missing return statement at end of non-void function "InternalFLASH::EraseAllRecords" 
-  }
-..\Core\Src\Flash_Driver.cpp(192): warning:  #9-D: nested comment is not allowed
-          /* all in one page
-..\Core\Src\Flash_Driver.cpp(234): warning:  #1-D: last line of file ends without a newline
-  */
-..\Core\Src\Flash_Driver.cpp: 5 warnings, 5 errors
-compiling main.c...
-../Core/Inc/Flash_Driver.h(105): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Src/main.c(77): error:  #265-D: member "InternalFLASH::storage"  (declared at line 86 of "../Core/Inc/Flash_Driver.h") is inaccessible
-    FlashMap_List *FlashDataRecord = flash->storage;
-../Core/Src/main.c(81): error:  #135: class "FlashMeta"  has no member "len"
-      uint8_t* TxData_2_Send = new uint8_t[FlashDataRecord->Meta->len + 2];
-../Core/Src/main.c(83): error:  #135: class "FlashMeta"  has no member "len"
-      TxData_2_Send[1] = FlashDataRecord->Meta->len;
-../Core/Src/main.c(84): error:  #135: class "FlashMeta"  has no member "len"
-      memcpy(TxData_2_Send + 2, (uint32_t*)FlashDataRecord->Meta->start, FlashDataRecord->Meta->len);
-../Core/Src/main.c(90): error:  #135: class "FlashMeta"  has no member "len"
-      TxHeader.DLC =  FlashDataRecord->Meta->len + 2;
-../Core/Src/main.c(100): error:  #153: expression must have class type
-    flash.EraseAllRecords();
-../Core/Src/main.c(107): error:  #153: expression must have class type
-    uint32_t* TxData_2_Send = battery.GetFlightData();
-../Core/Src/main.c(126): error:  #65: expected a ";"
-    char* NewRecord_RawData = new char[29];
-../Core/Src/main.c(127): error:  #20: identifier "NewRecord_RawData" is undefined
-    NewRecord_RawData[0] = time;
-../Core/Src/main.c(129): error:  #153: expression must have class type
-    NewRecord_RawData[2] = (char*)battery.GetData(); //type??? 
-../Core/Src/main.c(131): error:  #20: identifier "NewRecord_Data" is undefined
-    NewRecord_Data.raw = NewRecord_RawData;
-../Core/Src/main.c(138): error:  #153: expression must have class type
-    flash.WriteData(NewRecord_Container);
-../Core/Src/main.c(144): error:  #65: expected a ";"
-    char* NewRecord_RawData = new char[29];
-../Core/Src/main.c(145): error:  #20: identifier "NewRecord_RawData" is undefined
-    NewRecord_RawData[0] = time;
-../Core/Src/main.c(149): error:  #20: identifier "NewRecord_Data" is undefined
-    NewRecord_Data.raw = NewRecord_RawData;
-../Core/Src/main.c(156): error:  #153: expression must have class type
-    flash.WriteData(NewRecord_Container);
-../Core/Src/main.c(168): error:  #165: too few arguments in function call
-              CAN_SendDataFromFlash(); break;
-../Core/Src/main.c(170): error:  #165: too few arguments in function call
-              CAN_SendFlyingData(); break;
-../Core/Src/main.c(172): error:  #20: identifier "CAN_SaveFalsh" is undefined
-              CAN_SaveFalsh(); break;
-../Core/Src/main.c(192): warning:  #177-D: variable "smbus_address"  was declared but never referenced
+../Core/Src/main.cpp(194): warning:  #177-D: variable "smbus_address"  was declared but never referenced
     uint8_t smbus_address = 0x16;
-../Core/Src/main.c(193): warning:  #177-D: variable "data"  was declared but never referenced
+../Core/Src/main.cpp(195): warning:  #177-D: variable "data"  was declared but never referenced
     uint8_t data[20];
-../Core/Src/main.c(238): warning:  #177-D: variable "a"  was declared but never referenced
+../Core/Src/main.cpp(240): warning:  #177-D: variable "a"  was declared but never referenced
     uint32_t a = (uint32_t)&Load$$LR$$LR_IROM1$$Limit; // pointer to end of software
-../Core/Src/main.c: 4 warnings, 19 errors
-compiling smart_battery.cpp...
-..\Core\Src\smart_battery.cpp(75): warning:  #1-D: last line of file ends without a newline
-  };
-..\Core\Src\smart_battery.cpp: 1 warning, 0 errors
-"accum\accum.axf" - 24 Error(s), 10 Warning(s).
+../Core/Src/main.cpp: 4 warnings, 0 errors
+linking...
+Program Size: Code=15448 RO-data=408 RW-data=56 ZI-data=1880  
+FromELF: creating hex file...
+"accum\accum.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -125,8 +64,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.6.0
       Include file:  CMSIS\Core\Include\tz_context.h
-Target not created.
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

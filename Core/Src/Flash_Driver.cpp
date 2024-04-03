@@ -21,7 +21,8 @@ Data::Data(){
     this->Data_Raw_Len = 0;
     this->Data_Id = 0;
     this->Data_GovernorCode = 0;
-}
+};
+
 Data::Data(Data *ExstData){
     this->Data_Raw = ExstData->Data_Raw;
     this->Data_Raw_Len = ExstData->Data_Raw_Len;
@@ -122,7 +123,7 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
 
     HAL_FLASH_Unlock();
     /*Using `ceil` for divide with round up*/
-    for (int i = 0; i < data->; i++ ){
+    for (int i = 0; i < data->FlashData_Meta->len; i++ ){
         if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD,this->current_addres,data_buff[i]) != HAL_OK){
             HAL_FLASH_Lock();
           return OperationStatus::ErrorCode;        
@@ -196,7 +197,7 @@ OperationStatus InternalFLASH::EraseAllRecords(){
         uint32_t PageError;
         if (HAL_FLASHEx_Erase(&EraseInitStruct, &PageError) != HAL_OK)
         {
-            return HAL_FLASH_GetError ();
+            HAL_FLASH_GetError ();
         }
     }
     return OperationStatus::OK;
