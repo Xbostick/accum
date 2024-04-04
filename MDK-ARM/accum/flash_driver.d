@@ -29,5 +29,7 @@ accum\flash_driver.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c.h
 accum\flash_driver.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c_ex.h
 accum\flash_driver.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h
 accum\flash_driver.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h
+accum\flash_driver.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim.h
+accum\flash_driver.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h
 accum\flash_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 accum\flash_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

@@ -1,4 +1,4 @@
-accum\main.o: ../Core/Src/main.c
+accum\main.o: ../Core/Src/main.cpp
 accum\main.o: ../Core/Inc/main.h
 accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h
 accum\main.o: ../Core/Inc/stm32f0xx_hal_conf.h
@@ -29,6 +29,8 @@ accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c.h
 accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c_ex.h
 accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h
 accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h
+accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim.h
+accum\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h
 accum\main.o: ../Core/Inc/smart_battery.h
 accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 accum\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

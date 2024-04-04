@@ -46,7 +46,11 @@ CAN_HandleTypeDef hcan;
 
 I2C_HandleTypeDef hi2c1;
 
+TIM_HandleTypeDef htim14;
+
 /* USER CODE BEGIN PV */
+InternalFLASH flash;
+SmartBattery ba(&hi2c1);
 CAN_TxHeaderTypeDef TxHeader;
 CAN_RxHeaderTypeDef RxHeader;
 uint8_t TxData[8] = {0,};
@@ -60,19 +64,117 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_CAN_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_TIM14_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void CAN_SendDataFromFlash(){};
-void CAN_SendFlyingData(){};
-void CAN_SaveFalsh(){};
-void SaveFalsh(SmartBattery battery, long count){
+  int time = 0;
+
+void CAN_SaveFlashRegular(SmartBattery* battery, InternalFLASH* flash);
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+time++;
+if (time % 10 == 0) CAN_SaveFlashRegular(&ba, &flash);
+}
+
+/*Function which export all data from flash and send it to the CAN bus 
+  After this function, all flash data will be erased 
+  
+  TODO: add timer from flight start*/
+struct SystemFlags{
+  bool SendAllData;
+  bool SendSmallData;
+  bool SaveEvent;
+}Flags;
+
+void CAN_SendDataFromFlash(InternalFLASH* flash){
+  
+  FlashMap_List *FlashDataRecord = flash->storage;
+  // Tx like [num, len, data..] 
+  while(FlashDataRecord->Prev != NULL){
+    FlashDataRecord = FlashDataRecord->Prev;
+    uint32_t* TxData_2_Send = new uint32_t[(FlashDataRecord->Meta->len)];
+    //TxData_2_Send[0] = FlashDataRecord->Meta->idx;
+    //TxData_2_Send[1] = FlashDataRecord->Meta->len;
+    memcpy(TxData_2_Send, (uint32_t*)FlashDataRecord->Meta->start, FlashDataRecord->Meta->len);
+
+    TxHeader.StdId = 0x181; //id
+    TxHeader.ExtId = 0;
+    TxHeader.RTR = CAN_RTR_DATA; //CAN_RTR_REMOTE
+    TxHeader.IDE = CAN_ID_STD;   // CAN_ID_EXT
+    TxHeader.DLC =  FlashDataRecord->Meta->len * 4;
+
+    if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, (uint8_t*)TxData_2_Send, &TxMailbox) != HAL_OK)
+      {
+              HAL_Delay(10);
+      }
+    delete TxData_2_Send;
+  }
+
+  flash->EraseAllRecords();
+};
+
+/*Function so send ongoing state
+
+  TODO Check types!!*/
+void CAN_SendFlyingData(SmartBattery* battery){
+  uint32_t* TxData_2_Send = battery->GetFlightData();
+  
+  TxHeader.StdId = 0x182; //id
+  TxHeader.ExtId = 0;
+  TxHeader.RTR = CAN_RTR_DATA; //CAN_RTR_REMOTE
+  TxHeader.IDE = CAN_ID_STD;   // CAN_ID_EXT
+  TxHeader.DLC =  8;
+
+  if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, (uint8_t*)TxData_2_Send, &TxMailbox) != HAL_OK)
+    {
+            HAL_Delay(10);
+    }
+  delete TxData_2_Send;
+};
+void CAN_SaveFlashRegular(SmartBattery* battery, InternalFLASH* flash){
+  uint32_t id = 0;
+  int NewRecord_Len = 40;
+  /* 40 bytes from `GetdData()`*/
+  uint8_t* NewRecord_RawData = new uint8_t[40];
+  uint32_t* Battery_Data = battery->GetData();
+  memcpy(NewRecord_RawData, Battery_Data, 40);
+  delete Battery_Data;
+  NewRecord_RawData[0] = time;
+  NewRecord_RawData[1] = id;
+  time = 0;
+  FlashData* NewRecord_Container = new FlashData(
+                                                NewRecord_RawData,
+                                                NewRecord_Len
+                                                );
+  flash->WriteData(NewRecord_Container);
+};
+
+
+void SaveEvent(SmartBattery* battery, InternalFLASH* flash){
+  uint32_t id = 1;
+  int NewRecord_Len = 40;
+  /* 40 bytes from `GetdData()`*/
+  uint8_t* NewRecord_RawData = new uint8_t[40];
+  uint32_t* Battery_Data = battery->GetData();
+  memcpy(NewRecord_RawData, Battery_Data, 40);
+  delete Battery_Data;
+  NewRecord_RawData[0] = time;
+  NewRecord_RawData[1] = id;
+  time = 0;
+  FlashData* NewRecord_Container = new FlashData(
+                                                NewRecord_RawData,
+                                                NewRecord_Len
+                                                );
+  flash->WriteData(NewRecord_Container);
 };
 void check_tx(){};
 
+
+  
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) 
 /*CAN recieve command calback*/
 {
@@ -81,11 +183,16 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
         switch (RxData[0])
         {
           case 0:
-            CAN_SendDataFromFlash(); break;
+            //Flags.SendAllData = true;
+            //CAN_SendDataFromFlash(&flash); 
+            break;
           case 1:
-            CAN_SendFlyingData(); break;
+            //Flags.SaveEvent = true;
+            //CAN_SendFlyingData(&ba); 
+            break;
           case 2:
-            CAN_SaveFalsh(); break;
+           // Flags.SendSmallData = true;
+            break;
           default:
             check_tx(); break;
         }
@@ -115,10 +222,6 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-  char test[256];
-   // pointer to end of software
-  sprintf(test,"Limit %08X\n", (uint32_t)&Load$$LR$$LR_IROM1$$Limit);
-  
 
   /* USER CODE BEGIN Init */
 
@@ -137,9 +240,10 @@ int main(void)
   MX_GPIO_Init();
   MX_CAN_Init();
   MX_I2C1_Init();
+  MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
 /* USER CODE BEGIN 2 */
-TxHeader.StdId = 0x0377;
+TxHeader.StdId = 0x0377; //id
 TxHeader.ExtId = 0;
 TxHeader.RTR = CAN_RTR_DATA; //CAN_RTR_REMOTE
 TxHeader.IDE = CAN_ID_STD;   // CAN_ID_EXT
@@ -148,32 +252,38 @@ TxHeader.DLC = 8;
 HAL_CAN_Start(&hcan); //start CAN
   
 HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
+HAL_TIM_Base_Start_IT(&htim14);
 
-SmartBattery ba(&hi2c1);
   /* USER CODE END 2 */
-  uint32_t a = (uint32_t)&Load$$LR$$LR_IROM1$$Limit; // pointer to end of software
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   ba.CMD(SBCommands_Basic::Voltage);
-  InternalFLASH flash;
-  FlashData datak((char*)ba.buff, 2);
+  FlashData datak((uint8_t*)ba.buff, 8);
   flash.WriteData(&datak);
   uint32_t* data_readed;
   FlashData* CheckRecord = flash.ReadData();
-  memcpy(TxData,CheckRecord->raw,8);
+  memcpy(TxData,CheckRecord->Data_Raw,8);
   //HAL_Delay(test);
   while (1)
   {
-    data_readed = ba.GetData();
-    TxHeader.StdId = 0x0378;
-      while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan) == 0);
+    
+    if (Flags.SaveEvent){
+      SaveEvent(&ba, &flash);
+      Flags.SaveEvent = false;
+    }
 
-        if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
-        {
-                HAL_Delay(10);
-        }
+    if (Flags.SendSmallData){
+      CAN_SendFlyingData(&ba);
+      Flags.SendSmallData = false;
+    }
 
-    delete[] data_readed;
+    if (Flags.SendAllData){
+      CAN_SendDataFromFlash(&flash);
+      Flags.SendAllData = false;
+    }
+      
+   
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -323,6 +433,37 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief TIM14 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM14_Init(void)
+{
+
+  /* USER CODE BEGIN TIM14_Init 0 */
+
+  /* USER CODE END TIM14_Init 0 */
+
+  /* USER CODE BEGIN TIM14_Init 1 */
+
+  /* USER CODE END TIM14_Init 1 */
+  htim14.Instance = TIM14;
+  htim14.Init.Prescaler = 31999;
+  htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim14.Init.Period = 1000;
+  htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM14_Init 2 */
+
+  /* USER CODE END TIM14_Init 2 */
 
 }
 

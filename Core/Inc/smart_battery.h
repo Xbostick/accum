@@ -108,11 +108,12 @@ class SmartBattery{
 
   
   public:
-    uint8_t             buff[8];
+    __attribute__((aligned(2))) uint8_t             buff[8];
     
     SmartBattery(I2C_HandleTypeDef* hal_i2c_handler);
     void CMD(uint8_t SBCommand);
     uint32_t* GetData();
+    uint32_t* GetFlightData();
   
     
 };
