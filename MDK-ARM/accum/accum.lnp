@@ -1,7 +1,6 @@
 --cpu Cortex-M0
 "accum\startup_stm32f042x6.o"
 "accum\main.o"
-"accum\main_1.o"
 "accum\stm32f0xx_it.o"
 "accum\stm32f0xx_hal_msp.o"
 "accum\stm32f0xx_hal_can.o"

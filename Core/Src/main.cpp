@@ -46,6 +46,8 @@ CAN_HandleTypeDef hcan;
 
 I2C_HandleTypeDef hi2c1;
 
+TIM_HandleTypeDef htim14;
+
 /* USER CODE BEGIN PV */
 InternalFLASH flash;
 SmartBattery ba(&hi2c1);
@@ -62,6 +64,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_CAN_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_TIM14_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -166,7 +169,7 @@ void check_tx(){};
 
   int time = 0;
 
-void TIM14_IRQHandler(){
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 time++;
 }
   
@@ -217,10 +220,6 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-  char test[256];
-   // pointer to end of software
-  sprintf(test,"Limit %08X\n", (uint32_t)&Load$$LR$$LR_IROM1$$Limit);
-  
 
   /* USER CODE BEGIN Init */
 
@@ -239,6 +238,7 @@ int main(void)
   MX_GPIO_Init();
   MX_CAN_Init();
   MX_I2C1_Init();
+  MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
 /* USER CODE BEGIN 2 */
 TxHeader.StdId = 0x0377; //id
@@ -250,10 +250,10 @@ TxHeader.DLC = 8;
 HAL_CAN_Start(&hcan); //start CAN
   
 HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
-
+HAL_TIM_Base_Start_IT(&htim14);
 
   /* USER CODE END 2 */
-  uint32_t a = (uint32_t)&Load$$LR$$LR_IROM1$$Limit; // pointer to end of software
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   ba.CMD(SBCommands_Basic::Voltage);
@@ -266,8 +266,11 @@ HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
   while (1)
   {
     
-    if (Flags.SaveEvent)
+    if (Flags.SaveEvent){
       SaveEvent(&ba, &flash);
+      Flags.SaveEvent = false;
+    }
+      
    
     /* USER CODE END WHILE */
 
@@ -418,6 +421,37 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief TIM14 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM14_Init(void)
+{
+
+  /* USER CODE BEGIN TIM14_Init 0 */
+
+  /* USER CODE END TIM14_Init 0 */
+
+  /* USER CODE BEGIN TIM14_Init 1 */
+
+  /* USER CODE END TIM14_Init 1 */
+  htim14.Instance = TIM14;
+  htim14.Init.Prescaler = 31999;
+  htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim14.Init.Period = 1000;
+  htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM14_Init 2 */
+
+  /* USER CODE END TIM14_Init 2 */
 
 }
 
