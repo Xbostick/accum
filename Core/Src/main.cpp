@@ -73,6 +73,12 @@ static void MX_I2C1_Init(void);
   After this function, all flash data will be erased 
   
   TODO: add timer from flight start*/
+struct SystemFlags{
+  bool SendAllData;
+  bool SendSmallData;
+  bool SaveEvent;
+}Flags;
+
 void CAN_SendDataFromFlash(InternalFLASH* flash){
   
   FlashMap_List *FlashDataRecord = flash->storage;
@@ -158,7 +164,12 @@ void SaveEvent(SmartBattery* battery, InternalFLASH* flash){
 };
 void check_tx(){};
 
+  int time = 0;
 
+void TIM14_IRQHandler(){
+time++;
+}
+  
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) 
 /*CAN recieve command calback*/
 {
@@ -167,11 +178,16 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
         switch (RxData[0])
         {
           case 0:
-            CAN_SendDataFromFlash(&flash); break;
+            Flags.SendAllData = true;
+            //CAN_SendDataFromFlash(&flash); 
+            break;
           case 1:
-            CAN_SendFlyingData(&ba); break;
+            Flags.SaveEvent = true;
+            //CAN_SendFlyingData(&ba); 
+            break;
           case 2:
-            CAN_SaveFalshRegular(&ba, &flash); break;
+            Flags.SendSmallData = true;
+            break;
           default:
             check_tx(); break;
         }
@@ -249,16 +265,10 @@ HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
   //HAL_Delay(test);
   while (1)
   {
-    data_readed = ba.GetData();
-    TxHeader.StdId = 0x0378;
-      while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan) == 0);
-
-        if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
-        {
-                HAL_Delay(10);
-        }
-
-    delete[] data_readed;
+    
+    if (Flags.SaveEvent)
+      SaveEvent(&ba, &flash);
+   
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

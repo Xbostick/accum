@@ -101,8 +101,8 @@ InternalFLASH::InternalFLASH(){
  * @return OperationStatus 
  */
 OperationStatus InternalFLASH::WriteData(FlashData* data){
-    uint32_t* data_buff = new uint32_t;
     FlashMap_List* storage_buff = new FlashMap_List;
+    __attribute__((aligned(8))) uint32_t* RawData_buff = new uint32_t[data->FlashData_Meta->len];
     
     /*If in MetaData no starting addres write it after previous record*/
     if (data->FlashData_Meta->start == 0) data->FlashData_Meta->start = this->current_addres; 
@@ -115,16 +115,18 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
         data->FlashData_Meta->idx = 0;
     }
 
-    memcpy(data_buff,data->Data_Raw,data->Data_Raw_Len);
     memcpy(this->storage->Meta, data->FlashData_Meta,sizeof(FlashMeta));
+    memcpy(RawData_buff,data->Data_Raw,data->Data_Raw_Len);
     
+
     storage_buff->Prev = this->storage;
+    storage_buff->Meta = new FlashMeta;
     this->storage = storage_buff;
 
     HAL_FLASH_Unlock();
     /*Using `ceil` for divide with round up*/
     for (int i = 0; i < data->FlashData_Meta->len; i++ ){
-        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD,this->current_addres,data_buff[i]) != HAL_OK){
+        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD,this->current_addres,(uint64_t)RawData_buff[i]) != HAL_OK){
             HAL_FLASH_Lock();
           return OperationStatus::ErrorCode;        
         }
@@ -132,7 +134,7 @@ OperationStatus InternalFLASH::WriteData(FlashData* data){
     }
     HAL_FLASH_Lock();
 
-    delete data_buff, data;  
+    delete data, RawData_buff;  
     return OperationStatus::OK;  
 
 }

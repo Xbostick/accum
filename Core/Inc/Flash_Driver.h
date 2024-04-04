@@ -113,7 +113,7 @@ class FlashData : public Data{
 
 struct FlashMap_List{
 
-    FlashMeta*          Meta;
+    FlashMeta*        Meta;
     FlashMap_List* 		Prev;    
 };
 

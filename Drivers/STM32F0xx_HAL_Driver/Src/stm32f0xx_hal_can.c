@@ -335,9 +335,6 @@ HAL_StatusTypeDef HAL_CAN_Init(CAN_HandleTypeDef *hcan)
 
   /* Get tick */
   tickstart = HAL_GetTick();
-  
-        /*Manual wake up*/
-  CLEAR_BIT(hcan->Instance->MCR, CAN_MCR_SLEEP); // transfered manually 
 
   /* Wait initialisation acknowledge */
   while ((hcan->Instance->MSR & CAN_MSR_INAK) == 0U)
