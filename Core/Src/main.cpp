@@ -71,6 +71,14 @@ static void MX_TIM14_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+  int time = 0;
+
+void CAN_SaveFlashRegular(SmartBattery* battery, InternalFLASH* flash);
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+time++;
+if (time % 10 == 0) CAN_SaveFlashRegular(&ba, &flash);
+}
 
 /*Function which export all data from flash and send it to the CAN bus 
   After this function, all flash data will be erased 
@@ -88,23 +96,22 @@ void CAN_SendDataFromFlash(InternalFLASH* flash){
   // Tx like [num, len, data..] 
   while(FlashDataRecord->Prev != NULL){
     FlashDataRecord = FlashDataRecord->Prev;
-    uint8_t* TxData_2_Send = new uint8_t[FlashDataRecord->Meta->len + 2];
-    TxData_2_Send[0] = FlashDataRecord->Meta->idx;
-    TxData_2_Send[1] = FlashDataRecord->Meta->len;
-    memcpy(TxData_2_Send + 2, (uint32_t*)FlashDataRecord->Meta->start, FlashDataRecord->Meta->len);
+    uint32_t* TxData_2_Send = new uint32_t[(FlashDataRecord->Meta->len)];
+    //TxData_2_Send[0] = FlashDataRecord->Meta->idx;
+    //TxData_2_Send[1] = FlashDataRecord->Meta->len;
+    memcpy(TxData_2_Send, (uint32_t*)FlashDataRecord->Meta->start, FlashDataRecord->Meta->len);
 
     TxHeader.StdId = 0x181; //id
     TxHeader.ExtId = 0;
     TxHeader.RTR = CAN_RTR_DATA; //CAN_RTR_REMOTE
     TxHeader.IDE = CAN_ID_STD;   // CAN_ID_EXT
-    TxHeader.DLC =  FlashDataRecord->Meta->len + 2;
+    TxHeader.DLC =  FlashDataRecord->Meta->len * 4;
 
-    if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+    if(HAL_CAN_AddTxMessage(&hcan, &TxHeader, (uint8_t*)TxData_2_Send, &TxMailbox) != HAL_OK)
       {
               HAL_Delay(10);
       }
     delete TxData_2_Send;
-    FlashDataRecord = FlashDataRecord->Prev;
   }
 
   flash->EraseAllRecords();
@@ -128,9 +135,7 @@ void CAN_SendFlyingData(SmartBattery* battery){
     }
   delete TxData_2_Send;
 };
-void CAN_SaveFalshRegular(SmartBattery* battery, InternalFLASH* flash){
-
-  uint32_t time = 0;
+void CAN_SaveFlashRegular(SmartBattery* battery, InternalFLASH* flash){
   uint32_t id = 0;
   int NewRecord_Len = 40;
   /* 40 bytes from `GetdData()`*/
@@ -140,6 +145,7 @@ void CAN_SaveFalshRegular(SmartBattery* battery, InternalFLASH* flash){
   delete Battery_Data;
   NewRecord_RawData[0] = time;
   NewRecord_RawData[1] = id;
+  time = 0;
   FlashData* NewRecord_Container = new FlashData(
                                                 NewRecord_RawData,
                                                 NewRecord_Len
@@ -149,7 +155,6 @@ void CAN_SaveFalshRegular(SmartBattery* battery, InternalFLASH* flash){
 
 
 void SaveEvent(SmartBattery* battery, InternalFLASH* flash){
-  uint32_t time = 0;
   uint32_t id = 1;
   int NewRecord_Len = 40;
   /* 40 bytes from `GetdData()`*/
@@ -159,6 +164,7 @@ void SaveEvent(SmartBattery* battery, InternalFLASH* flash){
   delete Battery_Data;
   NewRecord_RawData[0] = time;
   NewRecord_RawData[1] = id;
+  time = 0;
   FlashData* NewRecord_Container = new FlashData(
                                                 NewRecord_RawData,
                                                 NewRecord_Len
@@ -167,11 +173,7 @@ void SaveEvent(SmartBattery* battery, InternalFLASH* flash){
 };
 void check_tx(){};
 
-  int time = 0;
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-time++;
-}
   
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) 
 /*CAN recieve command calback*/
@@ -181,15 +183,15 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
         switch (RxData[0])
         {
           case 0:
-            Flags.SendAllData = true;
+            //Flags.SendAllData = true;
             //CAN_SendDataFromFlash(&flash); 
             break;
           case 1:
-            Flags.SaveEvent = true;
+            //Flags.SaveEvent = true;
             //CAN_SendFlyingData(&ba); 
             break;
           case 2:
-            Flags.SendSmallData = true;
+           // Flags.SendSmallData = true;
             break;
           default:
             check_tx(); break;
@@ -269,6 +271,16 @@ HAL_TIM_Base_Start_IT(&htim14);
     if (Flags.SaveEvent){
       SaveEvent(&ba, &flash);
       Flags.SaveEvent = false;
+    }
+
+    if (Flags.SendSmallData){
+      CAN_SendFlyingData(&ba);
+      Flags.SendSmallData = false;
+    }
+
+    if (Flags.SendAllData){
+      CAN_SendDataFromFlash(&flash);
+      Flags.SendAllData = false;
     }
       
    

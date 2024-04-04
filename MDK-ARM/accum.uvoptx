@@ -157,7 +157,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>273</LineNumber>
+          <LineNumber>267</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -173,41 +173,25 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>152</LineNumber>
+          <LineNumber>141</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134228794</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Core/Src/stm32f0xx_it.c</Filename>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>../Core/Src/main.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\accum\../Core/Src/stm32f0xx_it.c\152</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>173</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134228752</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Core/Src/main.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\accum\../Core/Src/main.cpp\173</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
           <LineNumber>85</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134229836</Address>
+          <Address>134230960</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -219,11 +203,11 @@
           <Expression>\\accum\../Core/Src/Flash_Driver.cpp\85</Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
+          <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>270</LineNumber>
+          <LineNumber>278</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134232018</Address>
+          <Address>134233210</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -232,7 +216,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>../Core/Src/main.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\accum\../Core/Src/main.cpp\270</Expression>
+          <Expression>\\accum\../Core/Src/main.cpp\278</Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>197</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134223184</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>../Core/Src/main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\accum\../Core/Src/main.cpp\197</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -311,6 +311,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>NewRecord_Container</ItemText>
         </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>flash</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
@@ -324,7 +329,7 @@
         <Mm>
           <WinNumber>2</WinNumber>
           <SubType>10</SubType>
-          <ItemText>0x20000310</ItemText>
+          <ItemText>0x8004000</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow2>

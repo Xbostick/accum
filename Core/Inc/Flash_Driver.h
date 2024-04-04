@@ -38,7 +38,7 @@ class Data
     uint8_t Data_Id;
 
     uint8_t* Data_Raw;
-    uint32_t Data_Raw_Len = 0; //bytes count
+    ;uint32_t Data_Raw_Len = 0; //bytes count
 
     /**
      * @brief Construct a new Data object

@@ -72,7 +72,7 @@ FLASH_Page InternalFLASH::find_page(uint32_t addr){
             page < FLASH_PAGE_NTYPE_COUNTS[page_type];
             page++){
                 if (addr < ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[page_type] + (page * FLASH_PAGE_SIZE_NTYPE[page_type])){
-                    res.page_num = page - 1;
+                    res.page_num = page - 1;//page - 1;
                     res.page_type = page_type;
                     return res;
                 }
@@ -172,13 +172,18 @@ FlashData* InternalFLASH::ReadData(int idx){
 }
 
 OperationStatus InternalFLASH::EraseAllRecords(){
-    while (this->storage->Prev!= NULL){
+    while (this->storage!= NULL){
         FlashMap_List *FlashDataRecord = this->storage;
         this->storage = this->storage->Prev;
+        this->current_addres = FlashDataRecord->Meta->start;
         delete FlashDataRecord;        
     }
+    
+    this->storage = new FlashMap_List;
+    this->storage->Meta = new FlashMeta;
+    this->storage->Prev = NULL;
 
-     for (int i = 0; i < FLASH_PAGE_NTYPE_COUNTS[this->start_page.page_type]; i++){
+     for (int i = 0; i < FLASH_NTYPE_COUNT; i++){
         FLASH_EraseInitTypeDef EraseInitStruct;
         EraseInitStruct.TypeErase     = FLASH_TYPEERASE_PAGES;
 
@@ -186,8 +191,8 @@ OperationStatus InternalFLASH::EraseAllRecords(){
         if (this->start_page.page_type == i){            
             EraseInitStruct.PageAddress   = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[i] + 
                                             (this->start_page.page_num + 1) * FLASH_PAGE_SIZE_NTYPE[i];
-            EraseInitStruct.NbPages       = FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type] - 
-                                            (this->start_page.page_num + 1);
+            EraseInitStruct.NbPages       = 10;/* FLASH_PAGE_SIZE_NTYPE[this->start_page.page_type] - 
+                                            (this->start_page.page_num + 2);*/
         }
         else{
             EraseInitStruct.PageAddress   = ADDR_FLASH_PAGE_SIZE_NTYPE_BEGIN[i];
@@ -201,6 +206,7 @@ OperationStatus InternalFLASH::EraseAllRecords(){
         {
             HAL_FLASH_GetError ();
         }
+        HAL_FLASH_Lock();
     }
     return OperationStatus::OK;
 
